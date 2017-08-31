@@ -3,10 +3,10 @@ package golog
 import (
 	"os"
 
-	"github.com/Cappta/Cappta.Common.Go/Debug"
+	"github.com/Cappta/debugo"
 )
 
 var (
-	debugGetCaller = Debug.GetCaller
+	debugGetCaller = debugo.GetCaller
 	osHostname     = os.Hostname
 )

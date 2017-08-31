@@ -5,7 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Cappta/Cappta.Common.Go/Database"
+	"github.com/Cappta/god"
+	"github.com/Cappta/god/loki"
 	testdb "github.com/erikstmartin/go-testdb"
 	. "github.com/smartystreets/goconvey/convey"
 )
@@ -18,7 +19,7 @@ type QueryArgs struct {
 func TestTracesLogAdapter(t *testing.T) {
 	Convey("Given a mocked Database", t, func() {
 		queryChannel := make(chan *QueryArgs, 1)
-		database, err := Database.NewTestDatabase()
+		database, err := god.NewTestDatabase()
 		Convey("Then err should be nil", func() {
 			So(err, ShouldBeNil)
 		})
@@ -27,7 +28,7 @@ func TestTracesLogAdapter(t *testing.T) {
 				query: query,
 				args:  args,
 			}
-			return Database.NewDriverMockedResult(1, 1), nil
+			return loki.NewDriverResult(1, 1), nil
 		})
 		Convey("Given an Instance and Provider name", func() {
 			instanceName, providerName := "TestInstance", "TestProvider"
@@ -65,7 +66,7 @@ func TestTracesLogAdapter(t *testing.T) {
 									So(queryArgs.args[0], ShouldResemble, instanceName)
 								})
 								Convey("Then query's ProviderId should resemble expected ProviderId", func() {
-									So(queryArgs.args[1], ShouldResemble, []uint8{110, 159, 203, 255, 11, 116, 140, 177, 95, 149, 190, 216, 76, 228, 44, 50})
+									So(queryArgs.args[1], ShouldResemble, []uint8{97, 8, 148, 104, 62, 243, 155, 152, 141, 51, 202, 94, 179, 218, 210, 113})
 								})
 								Convey("Then query's ProviderName should resemble ProviderName", func() {
 									So(queryArgs.args[2], ShouldResemble, providerName)

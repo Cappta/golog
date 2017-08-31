@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/Cappta/Cappta.Common.Go/Math"
+	"github.com/Cappta/gohelpmath"
 )
 
 // Logger represents a Logger
@@ -25,7 +25,7 @@ func NewLogger(adapter LogAdapter, instanceName, providerName string) *Logger {
 		adapter:      adapter,
 		instanceName: instanceName,
 		providerName: providerName,
-		providerID:   Math.Hash([]byte(providerName), idLength),
+		providerID:   gohelpmath.Hash([]byte(providerName), idLength),
 	}
 }
 
@@ -66,34 +66,34 @@ func (logger *Logger) Info(message string) error {
 
 // Warning logs an error as a warning
 func (logger *Logger) Warning(err error) (returnError error) {
-	callerFunc, fileName, lineNumber, returnError := debugGetCaller()
+	stackCall, returnError := debugGetCaller(0)
 	if returnError != nil {
 		return
 	}
-	operation := callerFunc.Name()
+	operation := stackCall.Func.Name()
 	hostName, returnError := osHostname()
 	if returnError != nil {
 		return
 	}
 	return logger.Log(2000,
 		"Host: {host}; Operation: {operation}; FileName: {fileName}: LineNumber: {lineNumber}; Exception: {err}",
-		map[string]interface{}{"host": hostName, "operation": operation, "fileName": fileName, "lineNumber": lineNumber, "err": err.Error()},
+		map[string]interface{}{"host": hostName, "operation": operation, "fileName": stackCall.File, "lineNumber": stackCall.Line, "err": err.Error()},
 	)
 }
 
 // Error logs an error as a failure
 func (logger *Logger) Error(err error) (returnError error) {
-	callerFunc, fileName, lineNumber, returnError := debugGetCaller()
+	stackCall, returnError := debugGetCaller(0)
 	if returnError != nil {
 		return
 	}
-	operation := callerFunc.Name()
+	operation := stackCall.Func.Name()
 	hostName, returnError := osHostname()
 	if returnError != nil {
 		return
 	}
 	return logger.Log(3000,
 		"Host: {host}; Operation: {operation}; FileName: {fileName}: LineNumber: {lineNumber}; Exception: {err}",
-		map[string]interface{}{"host": hostName, "operation": operation, "fileName": fileName, "lineNumber": lineNumber, "err": err.Error()},
+		map[string]interface{}{"host": hostName, "operation": operation, "fileName": stackCall.File, "lineNumber": stackCall.Line, "err": err.Error()},
 	)
 }

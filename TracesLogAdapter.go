@@ -3,16 +3,17 @@ package golog
 import (
 	"time"
 
-	"github.com/Cappta/Cappta.Common.Go/Database"
+	"github.com/Cappta/god"
+	"github.com/Cappta/god/CapptaLog"
 )
 
 // TracesLogAdapter represents a log adapter which will log in the Traces table
 type TracesLogAdapter struct {
-	database *Database.Database
+	database *god.Database
 }
 
 // NewTracesLogAdapter creates a new TracesLogAdapter
-func NewTracesLogAdapter(database *Database.Database) *TracesLogAdapter {
+func NewTracesLogAdapter(database *god.Database) *TracesLogAdapter {
 	return &TracesLogAdapter{
 		database: database,
 	}
@@ -20,7 +21,7 @@ func NewTracesLogAdapter(database *Database.Database) *TracesLogAdapter {
 
 // Log will log the specified event into the Traces table
 func (logger *TracesLogAdapter) Log(eventID int, providerID []byte, instanceName, providerName, message, payload string) (err error) {
-	traces := &Database.Traces{
+	traces := &CapptaLog.Traces{
 		InstanceName:     instanceName,
 		ProviderID:       providerID,
 		ProviderName:     providerName,

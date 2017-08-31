@@ -2,10 +2,10 @@ package golog
 
 import (
 	"errors"
-	"runtime"
 	"testing"
 
-	. "github.com/Cappta/Cappta.Common.Go/Testing"
+	"github.com/Cappta/debugo"
+	. "github.com/Cappta/gohelpconvey"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -33,7 +33,7 @@ func TestLogger(t *testing.T) {
 						So(logData.InstanceName, ShouldResemble, instanceName)
 					})
 					Convey("Then query's ProviderId should resemble expected ProviderId", func() {
-						providerID := []uint8{110, 159, 203, 255, 11, 116, 140, 177, 95, 149, 190, 216, 76, 228, 44, 50}
+						providerID := []uint8{97, 8, 148, 104, 62, 243, 155, 152, 141, 51, 202, 94, 179, 218, 210, 113}
 						So(logData.ProviderID, ShouldResemble, providerID)
 					})
 					Convey("Then query's ProviderName should resemble ProviderName", func() {
@@ -116,8 +116,8 @@ func TestLogger(t *testing.T) {
 						})
 						Convey("When mocking Debug.GetCaller to return an error", func() {
 							returnedError := errors.New("FODEU O DEBUG")
-							debugGetCaller = func() (callerFunc *runtime.Func, file string, line int, err error) {
-								return nil, "", 0, returnedError
+							debugGetCaller = func(depth int) (stackCall *debugo.StackCall, err error) {
+								return nil, returnedError
 							}
 							Convey("When logging warning", func() {
 								err = logger.Warning(err)
