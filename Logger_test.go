@@ -75,8 +75,8 @@ func TestLogger(t *testing.T) {
 						Convey("When logging info", func() {
 							conveyLog(func() error { return logger.Info(message) },
 								1000,
-								"Host: CAPPDESK-0103; Message: Cappta melhor MAE :D",
-								"{\"hostName\":\"CAPPDESK-0103\",\"message\":\"Cappta melhor MAE :D\"}",
+								"Host: .*?; Message: Cappta melhor MAE :D",
+								"{\"hostName\":\".*?\",\"message\":\"Cappta melhor MAE :D\"}",
 							)
 						})
 					})
